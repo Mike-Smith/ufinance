@@ -13,21 +13,29 @@ import matplotlib.font_manager as font_manager
 startdate = datetime.date(2011,1,1)
 today = enddate = datetime.date.today()
 #ticker = 'SPY'
-#ticker='600197.SS'
-#fh = finance.fetch_historical_yahoo(ticker, startdate, enddate)
-## a numpy record array with fields: date, open, high, low, close, volume, adj_close)
-#r = mlab.csv2rec(fh); fh.close()
-#r.sort()
+ticker='600197.SS'
+fh = finance.fetch_historical_yahoo(ticker, startdate, enddate)
+# a numpy record array with fields: date, open, high, low, close, volume, adj_close)
+r = mlab.csv2rec(fh); fh.close()
+r.sort()
 
 # get data from database
 import sqlite3 as sqlite
 cx = sqlite.connect("/home/yun/workspace/pt/stock.sqlite")
 cu = cx.cursor()
-cu.execute("select * from ticks where symbol=\"DL\" order by time")
-cname = [tuple[0] for tuple in cur.description]
+name='"DL"'
+columns=["open", "high" ,  "low",  "close",  "cast(volume as integer)"];
+query="select "
+for a in columns:
+    query=query+a+', ';
+query=query[:-2]
+query=query+' '+"from ticks where symbol=%s order by time" % name
+cu.execute(query)
+cname = []
 rlt = cu.fetchall()
-r1=np.array(rlt, dtype=[(cname[i], type(rlt[])), ('open', float), ('high', float), ('low', float), ('close', float), ('volume', long), ('adj_close', float)])
-cu.close();
+cu.close()
+
+r1=np.array(rlt, dtype=[(cname[i], float) for i in range(0, 5)])
 
 def moving_average(x, n, type='simple'):
     """
