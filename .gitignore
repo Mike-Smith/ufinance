@@ -17,7 +17,8 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-
+mytest
+data
 # Installer logs
 pip-log.txt
 
@@ -33,3 +34,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# eric
+*.e4p
+*.e4q
+*.e4t
+stock.sqlite
