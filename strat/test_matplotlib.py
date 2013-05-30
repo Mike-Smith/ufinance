@@ -1,4 +1,3 @@
-import numpy as np
 import datetime
 import numpy as np
 import matplotlib.colors as colors
@@ -21,21 +20,20 @@ r.sort()
 
 # get data from database
 import sqlite3 as sqlite
-cx = sqlite.connect("/home/yun/workspace/pt/stock.sqlite")
+cx = sqlite.connect("./stock.sqlite")
 cu = cx.cursor()
 name='"DL"'
-columns=["open", "high" ,  "low",  "close",  "cast(volume as integer)"];
+columns=["time", "open", "high" ,  "low",  "close",  "cast(volume as integer)"];
 query="select "
 for a in columns:
     query=query+a+', ';
 query=query[:-2]
 query=query+' '+"from ticks where symbol=%s order by time" % name
 cu.execute(query)
-cname = []
 rlt = cu.fetchall()
 cu.close()
 
-r1=np.array(rlt, dtype=[(cname[i], float) for i in range(0, 5)])
+r1=np.array(rlt, dtype=[(a, float) for a in columns])
 
 def moving_average(x, n, type='simple'):
     """
